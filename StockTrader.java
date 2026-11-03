@@ -14,9 +14,7 @@ public class StockTrader {
 		double[] prices=new double[n];
         // TODO: create the three arrays, each with n elements
         loadData(in,years,months,prices);
-        for(int i=0;i<n;i++){
-			System.out.println(years[i]+" "+months[i]+" "+prices[i]);
-        }
+        printData(years,months,prices);
         // TODO: call loadData, then printData
     }
     
@@ -24,7 +22,18 @@ public class StockTrader {
 		for(int i=0;i<years.length;i++){
 			years[i]=in.nextInt();
 			months[i]=in.nextInt();
-			prices[i]=in.next();
+			prices[i]=in.nextDouble();
+		}
+    }
+    public static String monthName(int month){
+		String[] names={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+		return names[month-1];
+	} 
+	public static void printData(int[] years, int[] months, double[] prices){
+		for(int i=0;i<years.length;i++){
+			System.out.print(monthName(months[i])+" "+ years[i]+": $");
+			System.out.printf("%.2f", prices[i]);
+			System.out.println();
 		}
     }
 }
