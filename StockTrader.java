@@ -2,11 +2,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.lang.Math;
 
 public class StockTrader {
 
     public static void main(String[] args) throws FileNotFoundException {
-        Scanner in = new Scanner(new File("goog_2004_2010.txt"));
+        Scanner in = new Scanner(new File("aapl_2000_2010.txt"));
         String symbol = in.next();
         int n = in.nextInt();
 		int[] years=new int[n];
@@ -19,6 +20,7 @@ public class StockTrader {
         // TODO: call loadData, then printData
         System.out.println();
         double result = simulate(years, months, prices);
+        
 		System.out.printf("Final value: $%,.2f%n", result);
     }
     
@@ -99,7 +101,7 @@ public class StockTrader {
 		return cash + shares * prices[prices.length - 1];
 	}
 	public static String decide(double[] history, boolean holding, double boughtAt) {
-		return dipBuyer(history, holding, boughtAt); 
+		return casinoTrader(history, holding, boughtAt); 
 	}
 	public static String buyAndHold(double[] history, boolean holding, double boughtAt) {
 		return "BUY";
@@ -113,7 +115,7 @@ public class StockTrader {
 		return "";
 	}
 	public static String movingAverage(double[] history, boolean holding, double boughtAt) {
-		int average=0;
+		double average=0;
 		if(history.length<12)return "SELL";
 		for(int i=history.length-12;i<history.length;i++){
 			average+=history[i];
@@ -130,6 +132,32 @@ public class StockTrader {
 			}
 		}
 		return "";
+	}
+	public static String casinoTrader(double[] history, boolean holding, double boughtAt) {
+		
+			System.out.println("Deciding...");
+		try{
+		 	System.out.println();
+			double output=0;
+			String moving=movingAverage(history, holding, boughtAt);
+			String dip=dipBuyer(history, holding, boughtAt);
+		 	for(int i=0;i<10;i++){
+				output+=Math.random()-0.5;
+				if(moving.equals("BUY"))output+=0.02;
+				else if(moving.equals("SELL"))output-=0.02;
+				if(dip.equals("BUY"))output+=0.02;
+				else if(dip.equals("SELL"))output-=0.02;
+				System.out.print(output);
+		 		System.out.print("\r\033[2k");
+		 		System.out.flush();
+		 	}
+		 	if(output>0.75)return "BUY";
+		 	else return "SELL";
+		 }
+		 catch (Exception e) {
+             System.out.println(e);
+         }
+         return "";
 	}
 
 }
